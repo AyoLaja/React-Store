@@ -1,0 +1,25 @@
+import React from 'react';
+
+    const Header = (props) => {
+        return(
+            <header className="top">
+                <h1>
+                    Catch 
+                    <span className="ofThe">
+                        <span className="of">of</span>
+                        <span className="the">The</span>
+                    </span>
+                    Day
+                    </h1>
+                {/*this refers to the component,
+                props refers to an object available to us
+                */}
+                <h3 className="tagline">
+                    <span>{props.tagline}</span>
+                </h3>
+            </header>
+        );
+
+    } 
+        
+export default Header;
