@@ -2,18 +2,50 @@ import React, { Component } from 'react';
 import Header from './Header';
 import Inventory from './Inventory';
 import Order from './Order';
-import fishes from '../sample-fishes';
+import Item from './Item';
+import sampleBoots from '../sample-boots';
+import base from '../base';
 
 class App extends Component {
     constructor() {
         super();
         this.addItem = this.addItem.bind(this);
-        this.loadSampples = this.loadSamples.bind(this);
+        this.loadSamples = this.loadSamples.bind(this);
+        this.addToOrder = this.addToOrder.bind(this);
         //Initialize state
         this.state = {
             items: {},
             order: {}
         }
+    }
+
+    componentWillMount() {
+        //This runs right before the app is rendered
+        this.ref = base.syncState(`${this.props.params.storeId}/boots`, 
+        {
+            context: this,
+            state: 'items'
+        });
+
+        //Check if there is any order in local storage
+        const localStorageRef = localStorage.getItem(`order-${this.props.params.storeId}`);
+
+        if(localStorageRef) {
+            //Update App component order state
+            this.setState({
+                order: JSON.parse(localStorageRef)
+            });
+        }
+    }
+
+    componentWillUnmount() {
+        base.removeBinding(this.ref);
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        console.log('Somethign changed');
+        console.log({nextProps, nextState});
+        localStorage.setItem(`order-${this.props.params.storeId}`, JSON.stringify(nextState.order));
     }
 
     addItem(item) {
@@ -27,9 +59,19 @@ class App extends Component {
     }
 
     loadSamples() {
+        console.log(this.state.items);
         this.setState({
-            items: fishes
+            items: sampleBoots
         });
+    }
+
+    addToOrder(key) {
+        //Take a copy of state 
+        const order = {...this.state.order};
+        //Update or add new number of boots ordered
+        order[key] = order[key] + 1 || 1;
+        //Update State
+        this.setState({ order });
     }
 
     render() {
@@ -37,8 +79,17 @@ class App extends Component {
             <div className="catch-of-the-day">
                 <div className="menu">
                     <Header tagline="Soccer Store"/>
+                    <ul className="list-of-boot">
+                        {
+                            Object
+                                .keys(this.state.items)
+                                //Cannot pass down key because key is for React, use index instead.
+                                .map(key => <Item key={key} index={key} details={this.state.items[key]} addToOrder={this.addToOrder}/>)
+                        }
+                    </ul>
                 </div>
-                <Order/>
+                <Order boots={this.state.items} order={this.state.order} params={this.props.params}/>
+                {/*Pass addItem and loadSamples ass props to be accessed by the Inventory component*/}
                 <Inventory addItem={this.addItem} loadSamples={this.loadSamples}/>
             </div>
         );
