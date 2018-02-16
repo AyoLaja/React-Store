@@ -12,12 +12,15 @@ class App extends Component {
         this.addItem = this.addItem.bind(this);
         this.loadSamples = this.loadSamples.bind(this);
         this.addToOrder = this.addToOrder.bind(this);
+        this.updateItem = this.updateItem.bind(this);
+        this.removeItem = this.removeItem.bind(this);
+        this.removeFromOrder = this.removeFromOrder.bind(this);
         //Initialize state
         this.state = {
             items: {},
             order: {}
         }
-    }
+    } 
 
     componentWillMount() {
         //This runs right before the app is rendered
@@ -58,6 +61,23 @@ class App extends Component {
         this.setState({ items });
     }
 
+    updateItem(key, updatedItem) {
+        //Get copy of exsiting state
+        const items = {...this.state.items};
+        items[key] = updatedItem;
+        this.setState({
+            items
+        });
+    }
+
+    removeItem(key) {
+        const items = {...this.state.items};
+        items[key] = null;
+        this.setState({
+            items
+        })
+    }
+
     loadSamples() {
         console.log(this.state.items);
         this.setState({
@@ -74,6 +94,14 @@ class App extends Component {
         this.setState({ order });
     }
 
+    removeFromOrder(key) {
+        const order = {...this.state.order};
+        delete order[key];
+        this.setState({
+            order
+        })
+    }
+
     render() {
         return(
             <div className="catch-of-the-day">
@@ -88,9 +116,18 @@ class App extends Component {
                         }
                     </ul>
                 </div>
-                <Order boots={this.state.items} order={this.state.order} params={this.props.params}/>
+                <Order 
+                    boots={this.state.items} 
+                    order={this.state.order} 
+                    params={this.props.params}
+                    removeFromOrder={this.removeFromOrder}/>
                 {/*Pass addItem and loadSamples ass props to be accessed by the Inventory component*/}
-                <Inventory addItem={this.addItem} loadSamples={this.loadSamples}/>
+                <Inventory 
+                    items={this.state.items} 
+                    addItem={this.addItem} 
+                    loadSamples={this.loadSamples}
+                    updateItem={this.updateItem}
+                    removeItem={this.removeItem}/>
             </div>
         );
     }

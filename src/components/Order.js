@@ -10,16 +10,17 @@ class Order extends Component {
     renderOrder(key) {
         const boot = this.props.boots[key];
         const count = this.props.order[key];
+        const removeButton = <button onClick={() => this.props.removeFromOrder(key)}>&times;</button>
 
         if (!boot || boot.status === 'unavailable') {
-            return <li key={key}>Sorry, {boot ? boot.name: 'this boot'} is no longer avilable!</li>
+            return <li key={key}>Sorry, {boot ? boot.name: 'this boot'} is no longer avilable!{removeButton}</li>
         }
 
         return (
-            <li key={key}>
-                <span>{count}lbs {boot.name}</span>
-                <span className="price">{formatPrice(boot.price * count)}</span>
-            </li>
+                <li key={key}>
+                    <span>{count}lbs {boot.name} {removeButton}</span>
+                    <span className="price">{formatPrice(boot.price * count)}</span>
+                </li>
         )
     }
 
