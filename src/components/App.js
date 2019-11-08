@@ -3,7 +3,7 @@ import Header from './Header';
 import Inventory from './Inventory';
 import Order from './Order';
 import Item from './Item';
-import sampleBoots from '../sample-boots';
+import { boots } from '../sample-boots';
 import base from '../base';
 
 class App extends Component {
@@ -81,7 +81,7 @@ class App extends Component {
     loadSamples() {
         console.log(this.state.items);
         this.setState({
-            items: sampleBoots
+            items: boots
         });
     }
 

@@ -1,23 +1,20 @@
 // let's go!
 import React from 'react';
 import { render } from 'react-dom';
-import { BrowserRouter, Match, Miss } from 'react-router';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
+import { Routes } from './routes'
 
 import './css/style.css';
-import App from './components/App';
-import StorePicker from './components/StorePicker';
-import NotFound from './components/NotFound';
 
 const Root = () => {
     return (
-        <BrowserRouter>
-        <div>
-            {/*When exactly on the home page, show StorePicker component*/}
-            <Match exactly pattern="/" component={StorePicker}/>
-            <Match pattern="/store/:storeId" component={App}/>
-            <Miss component={NotFound}></Miss>
+        <Router>
+            <div>
+                <Link to="/">Home</Link>
+                <Link to={{pathname: '/store'}}>Home</Link>
+                {Routes}
             </div>
-        </BrowserRouter>
+        </Router>
     );
 }
 

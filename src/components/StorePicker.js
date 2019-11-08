@@ -9,6 +9,11 @@ class StorePicker extends Component {
 //   this.goToStore = this.goToStore.bind(this);
 // }
 
+componentWillMount() {
+  console.log(React.PropTypes)
+  console.log(this.context)
+}
+
   goToStore(event) {
     event.preventDefault();
     console.log('You changed the url');
@@ -35,7 +40,7 @@ class StorePicker extends Component {
 }
 
 StorePicker.contextTypes= {
-  router: React.PropTypes.object
+  router: React.PropTypes.object.isRequired
 }
 
 export default StorePicker;
